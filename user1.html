@@ -1,0 +1,100 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User</title>
+
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+
+<body>
+<br/>
+<div id="bal"></div><br/>
+<p>Enter Value:</p>
+<input type="text" id="val" /><br/>
+<p>Enter Address</p>
+<input type="text" id="add" /><br/>
+
+<div id="res"></div>
+<br/>
+<input type="button" id="btn" value="Transfer!" />
+<br/>
+
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+ <script>
+ if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var bal_demo = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "check",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "amount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "pay",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	}
+]);
+var adr = $("#add").val();
+var val = $("#val").val();
+
+var demo_user = bal_demo.at('0x0d81ae1095d36440578e4a75e608808cc87e5db0');
+        console.log(demo_user);
+var bb = demo_user.check()
+$("#bal").text(bb/1000000000000000000);
+
+$("#btn").click(function(){
+var b=  demo_user.pay($("#add").val(), {value : $("#val").val()*1000000000000000000});
+  $("#res").text("transfered!");
+});
+
+ </script>
+</body>
+</html>
